@@ -16,13 +16,11 @@
                 <div class="input-group mb-3">
                     
                     <input
-                    v-model="search"
                     type="text"
                     class="form-control"
                     placeholder="Cari Makanan Kesukaan Anda .."
                     aria-label="Cari"
                     aria-describedby="basic-addon1"
-                    @keyup="searchFood"
                     />
 
                     <div class="input-group-prepend">
@@ -35,9 +33,9 @@
             </div>
 
             <div class="row mb-4">
-                <!-- <div class="col-md-4 mt-4" v-for="product in products" :key="product.id">
+                <div class="col-md-4 mt-4" v-for="product in products" :key="product.id">
                 <CardProduct :product="product" />
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
@@ -46,12 +44,30 @@
 <script>
 // @ is an alias to /src
 import Navbar from '@/components/Navbar.vue'
+import CardProduct from '@/components/CardProduct.vue'
+import axios from 'axios'
 
 export default {
     name: 'Foods',
     components: {
-        Navbar
-    }
+        Navbar,
+        CardProduct,
+    },
+    data() {
+    return {
+        products: [],
+        }
+    },
+    methods : {
+        setProduct(data){
+        this.products = data;
+        }
+    },
+    mounted() {
+        axios.get('http://localhost:4000/products')
+        .then((response) => this.setProduct(response.data))
+        .catch((error) => console.log(error))
+    },
 }
 </script>
 
